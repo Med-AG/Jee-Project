@@ -1,0 +1,46 @@
+package cn.techtutorial.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import cn.techtutorial.model.Cart;
+
+@WebServlet("/remove-from-cart")
+public class RemoveFromCartServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
+		
+		PrintWriter out = response.getWriter();
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		if (id >= 1) {
+			ArrayList<Cart> cart_list = (ArrayList<Cart>) request.getSession().getAttribute("cart-list");
+			if (cart_list != null) {
+				for(Cart c : cart_list) {
+					if (c.getId() == id) {
+						int index = cart_list.indexOf(c);
+						cart_list.remove(index);
+						break;
+					}
+				}
+				response.sendRedirect("cart.jsp");
+			}
+		}else {
+			response.sendRedirect("cart.jsp");
+		}
+		
+		
+		
+	}
+
+}
